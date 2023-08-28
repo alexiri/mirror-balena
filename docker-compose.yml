@@ -1,0 +1,20 @@
+version: '2'
+services:
+  browser:
+    image: bh.cr/balenalabs/browser-armv7hf
+    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
+    network_mode: host
+    devices:
+      - "/dev:/dev"
+    restart: always
+
+  screen-control:
+    build: ./screen
+    privileged: true
+    restart: always
+
+  # temp-sensor:
+  #   build: ./temp
+  #   privileged: true
+  #   network_mode: host
+  #   restart: always
