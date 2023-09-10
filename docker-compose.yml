@@ -1,5 +1,27 @@
 version: '2'
+
+volumes:
+  mm-config:
+  mm-css:
+  mm-modules:
+
 services:
+  magicmirror:
+    image: karsten13/magicmirror:v2.24.0
+    user: "0:0"
+    ports:
+      - "8080:8080"
+    network_mode: host
+    volumes:
+      - mm-config:/opt/magic_mirror/config:ro
+      - mm-css:/opt/magic_mirror/css:ro
+      - mm-modules:/opt/magic_mirror/modules
+    command:
+      - npm
+      - run
+      - server
+    restart: always
+
   browser:
     image: bh.cr/balenalabs/browser-armv7hf
     privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
@@ -12,6 +34,15 @@ services:
     build: ./screen
     privileged: true
     restart: always
+
+  rsync:
+    build: ./rsync
+    privileged: true
+    restart: always
+    volumes:
+      - "mm-config:/config"
+      - "mm-css:/css"
+      - "mm-modules:/modules"
 
   # temp-sensor:
   #   build: ./temp

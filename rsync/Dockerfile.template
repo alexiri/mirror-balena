@@ -1,0 +1,14 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bookworm-run
+
+RUN apt-get update \
+  && apt-get install -y nfs-common rsync \
+  && rm -rf /var/lib/apt/lists/*
+
+ADD entry.sh /usr/local/bin/entry.sh
+ADD sync.sh /usr/local/bin/sync.sh
+
+VOLUME /config
+VOLUME /css
+VOLUME /modules
+
+ENTRYPOINT ["/usr/local/bin/entry.sh"]
